@@ -5,17 +5,19 @@ using Verse;
 
 namespace ShowHair.HarmonyPatches;
 
-[HarmonyPatch]
-internal static class Pawn_Removed_Patch
-{
-	private static IEnumerable<MethodInfo> TargetMethods()
-	{
-		yield return AccessTools.Method(typeof(Pawn), nameof(Pawn.DeSpawn));
-		yield return AccessTools.Method(typeof(Pawn), nameof(Pawn.Destroy));
-	}
+    [HarmonyPatch]
+    internal static class Pawn_Destroy_ClearCache_Patch
+    {
+        [HarmonyTargetMethod]
+        static MethodInfo TargetMethod()
+        {
+            return AccessTools.Method(typeof(Pawn), nameof(Pawn.Destroy));
+        }
 
-	private static void Postfix(Pawn __instance)
-	{
-		Utils.pawnCache.TryRemove(__instance.thingIDNumber, out _);
-	}
-}
+        [HarmonyPostfix]
+        static void Postfix(Pawn __instance)
+        {
+            if (__instance == null) return;
+            Utils.pawnCache.TryRemove(__instance.thingIDNumber, out _);
+        }
+    }
