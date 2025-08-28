@@ -1,7 +1,8 @@
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
-using HarmonyLib;
 using Verse;
+using static ShowHair.PawnRenderSubWorkerHair;
 
 namespace ShowHair.HarmonyPatches;
 
